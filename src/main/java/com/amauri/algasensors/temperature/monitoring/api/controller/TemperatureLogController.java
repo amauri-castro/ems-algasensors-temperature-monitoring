@@ -1,6 +1,6 @@
 package com.amauri.algasensors.temperature.monitoring.api.controller;
 
-import com.amauri.algasensors.temperature.monitoring.api.model.TemperatureLogOutput;
+import com.amauri.algasensors.temperature.monitoring.api.model.TemperatureLogData;
 import com.amauri.algasensors.temperature.monitoring.domain.model.SensorId;
 import com.amauri.algasensors.temperature.monitoring.domain.model.TemperatureLog;
 import com.amauri.algasensors.temperature.monitoring.domain.repository.TemperatureLogRepository;
@@ -22,13 +22,13 @@ public class TemperatureLogController {
     private final TemperatureLogRepository temperatureLogRepository;
 
     @GetMapping
-    public Page<TemperatureLogOutput> search(@PathVariable TSID sensorId,
-                                             @PageableDefault Pageable pageable) {
+    public Page<TemperatureLogData> search(@PathVariable TSID sensorId,
+                                           @PageableDefault Pageable pageable) {
         Page<TemperatureLog> temperatureLogsPage = temperatureLogRepository
                 .findAllBySensorId(new SensorId(sensorId), pageable);
 
         return temperatureLogsPage.map(temperature ->
-            TemperatureLogOutput.builder()
+            TemperatureLogData.builder()
                     .id(temperature.getId().getValue())
                     .value(temperature.getValue())
                     .registeredAt(temperature.getRegisteredAt())
